@@ -26,13 +26,13 @@ class SapGUI(kp.Plugin):
     def on_start(self):
         gui = ET.parse(os.path.expandvars(self.xml_path))
         todos = gui.findall('Services/Service')
-        self.itens = {}
+        self.items = {}
         for el in todos:
-            self.itens[str(el.get('uuid'))] = ItemSapGUI(str(el.get('name')), str(el.get('systemid')), str(el.get('server')))
+            self.items[str(el.get('uuid'))] = ItemSapGUI(str(el.get('name')), str(el.get('systemid')), str(el.get('server')))
 
     def on_catalog(self):
         catalog = []
-        for uuid, item in self.itens.items():
+        for uuid, item in self.items.items():
             self.dbg(item.nome)
             catalog.append(self.create_item(
                 category=kp.ItemCategory.KEYWORD,
@@ -49,8 +49,8 @@ class SapGUI(kp.Plugin):
 
     def on_execute(self, item, action):
         self.dbg(item)
-        self.dbg(self.itens[item.target()])
-        command = "\""+ self.sapgui_path +"\" " + self.itens[item.target()].ip + " " + self.itens[item.target()].instance
+        self.dbg(self.items[item.target()])
+        command = "\""+ self.sapgui_path +"\" " + self.items[item.target()].ip + " " + self.items[item.target()].instance
         self.dbg(command)
         os.system(os.path.expandvars(command))
 
